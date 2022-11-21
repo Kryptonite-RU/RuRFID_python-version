@@ -1,2 +1,5 @@
 # RuRFID_python-version
-RuRFID_python-version
+
+Реализация протокола аутентификации для RFID на языке Python.
+
+**"Transcripts"** - папка с транскрипциями соответствующих режимов для метки/устройства. 
