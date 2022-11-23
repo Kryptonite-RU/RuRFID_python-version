@@ -134,19 +134,8 @@ class base:
         print_('sending data: ', data, file)  
         # с шифрованием данных или без ?
         if (ProtMode & 1 == 0): #Protmode == 10
-            print('aaaaa', len(Resp + data))
-            for el in Resp + data:
-                print(hex(el), end = " ")
-            print()
-            print('key_m')
-            for i in key_byte_m:
-                print(hex(i), end = ' ')
-            print()
             MAC = gost3413.mac(cyther(key_byte_m).encrypt, block_size, Resp + data)
-            print('MAC')
-            for el in MAC:
-                print(hex(el), end = " ")
-            print()
+            print_('MAC():', MAC, file)
             TAM_response = Resp + bytearray(data[Profile: Profile + 
                 BlockCount * block_size]) + MAC
             return TAM_response
@@ -166,10 +155,12 @@ class base:
             elif (mode == 1):
                 cbc_data = IV + gost3413.cbc_encrypt(cyther(key_byte_e).decrypt, block_size, 
                     data, IV)
-            print_('CBC(data):', cbc_data, file)
+
+            print_('CBC():', cbc_data[len(IV):], file)
             MAC = gost3413.mac(cyther(key_byte_m).encrypt, block_size, 
                     Resp + cbc_data)
             print_('MAC():', MAC, file)
+
             #допущение - функции шифрования возвращают значения в big-endian
             TAM_response = Resp + cbc_data + MAC
             return TAM_response
@@ -1133,7 +1124,7 @@ def CONTROL_TEST_MAM_magma():
     f.close()
     return 
 
-def CONTROL_TEST_IAM():
+def CONTROL_TEST_IAM_grasshop():
 
 
     IChallenge = 0x0aabcdeffedcbaa01223456776543221
@@ -1183,7 +1174,7 @@ def CONTROL_TEST_IAM():
 
     return
 
-def CONTROL_TEST_TAM():
+def CONTROL_TEST_TAM_grasshop():
 
     inter_data = 0x99998888777766661111222233334444FFFFEEEEDDDDCCCCAAAABBBB00005555
     IChallenge = 0x0aabcdeffedcbaa01223456776543221
@@ -1230,7 +1221,7 @@ def CONTROL_TEST_TAM():
     f.close()
     return
 
-def CONTROL_TEST_MAM():
+def CONTROL_TEST_MAM_grasshop():
     inter_data = 0x99998888777766661111222233334444FFFFEEEEDDDDCCCCAAAABBBB00005555
     IChallenge = 0x0aabcdeffedcbaa01223456776543221
     TCHallenge = 0x023456788765432119abcdeffedcba90
@@ -1278,9 +1269,9 @@ def CONTROL_TEST_MAM():
 
 def main():
 
-    CONTROL_TEST_TAM()
-    CONTROL_TEST_IAM()
-    CONTROL_TEST_MAM()
+    CONTROL_TEST_TAM_grasshop()
+    CONTROL_TEST_IAM_grasshop()
+    CONTROL_TEST_MAM_grasshop()
 if __name__ == '__main__':
     main()
 
